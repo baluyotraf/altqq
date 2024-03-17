@@ -1,7 +1,9 @@
 import enum
-from typing import Annotated, TypeVar
+from typing import TypeVar
 
-_T = TypeVar("_T")
+from typing_extensions import Annotated
+
+T = TypeVar("T")
 
 
 class QueryValueTypes(enum.Enum):
@@ -9,4 +11,4 @@ class QueryValueTypes(enum.Enum):
     NON_PARAMETER = enum.auto()
 
 
-NonParameter = Annotated[_T, QueryValueTypes.NON_PARAMETER]
+NonParameter = Annotated[T, QueryValueTypes.NON_PARAMETER]

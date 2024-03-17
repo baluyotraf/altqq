@@ -2,11 +2,12 @@ import dataclasses as dc
 from typing import Any
 
 from altqq.structs import Query
+from altqq.types import T
 
 
 class PlainTextTranslator:
-    def _resolve_value(self, dataclass, field: dc.Field) -> Any:
-        value = getattr(dataclass, field.name)
+    def _resolve_value(self, query: Query, field: dc.Field[T]) -> Any:
+        value = getattr(query, field.name)
         if field.type == Query:
             return self.__call__(value)
         return value
