@@ -1,4 +1,4 @@
-from typing import Protocol, ClassVar, get_type_hints
+from typing import ClassVar
 import pydantic.dataclasses as dc
 
 
