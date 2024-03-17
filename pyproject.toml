@@ -1,0 +1,32 @@
+[tool.pyright]
+include = ["src"]
+strict = ["src"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "D"]
+ignore = ["D107"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.poetry]
+name = "altqq"
+version = "0.0.1a1"
+description = "Alternative Queries: Typed and Composable Tool for Handwritten SQL"
+authors = ["baluyotraf <baluyotraf@outlook.com>"]
+maintainers = ["baluyotraf <baluyotraf@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/baluyotraf/altqq"
+keywords = ["database", "SQL"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = "^2.6.4"
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.354"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
