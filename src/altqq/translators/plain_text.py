@@ -1,4 +1,4 @@
-"""Module for converting Query objects to plain text SQL"""
+"""Module for converting Query objects to plain text SQL."""
 
 import dataclasses as dc
 import typing
@@ -10,6 +10,8 @@ from typing_extensions import Annotated
 
 
 class PlainTextTranslator:
+    """Converts a `Query` to a plain text SQL."""
+
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> Any:
         value = getattr(query, field.name)
         if field.type == Query:
@@ -32,6 +34,18 @@ class PlainTextTranslator:
         return f"'{value}'"
 
     def __call__(self, query: Query) -> str:
+        """Converts a `Query` to a plain text SQL.
+
+        The conversion to plain text also handles some of the data types. None
+        is converted to `NULL`, numeric values are written as they are and
+        string values and other object types are escaped using `'`.
+
+        Args:
+            query (Query): Query to convert.
+
+        Returns:
+            str: Query as plain text.
+        """
         fields = dc.fields(query)
         format_dict = {f.name: self._resolve_value(query, f) for f in fields}
         return query.__query__.format(**format_dict)
