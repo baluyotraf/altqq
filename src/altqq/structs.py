@@ -1,8 +1,9 @@
 from typing import ClassVar
+
 import pydantic.dataclasses as dc
 
-
 QUERY_ATTRIB = "__query__"
+
 
 class QueryMeta(type):
     def _check_query_attribute(dataclass, dct):
