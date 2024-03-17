@@ -89,7 +89,7 @@ class PyODBCTranslator:
         query (Query): Query to translate to PyODBC
 
         Returns:
-        PyODBCQuery: PyODBC query with the string and parameters
+            PyODBCQuery: Equivalent query for PyODBC usage.
         """
         formatter = PyODBCFormatter()
         fields = dc.fields(query)
