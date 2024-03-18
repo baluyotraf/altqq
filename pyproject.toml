@@ -40,6 +40,10 @@ mkdocstrings = { version="^0.24.1", extras = ["python"] }
 mkdocs-include-markdown-plugin = "^6.0.4"
 mkdocs-material = { version = "^9.5.14", extras = ["imaging"] }
 
+[tool.pytest.ini_options]
+minversion = 8.0
+testpaths = ["tests"]
+
 [tool.tox]
 legacy_tox_ini = """
     [tox]
