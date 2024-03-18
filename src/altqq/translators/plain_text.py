@@ -4,9 +4,10 @@ import dataclasses as dc
 import typing
 from typing import Any
 
+from typing_extensions import Annotated
+
 from altqq.structs import Query
 from altqq.types import QueryValueTypes, T
-from typing_extensions import Annotated
 
 
 class PlainTextTranslator:

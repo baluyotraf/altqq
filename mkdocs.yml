@@ -1,0 +1,56 @@
+site_name: Alternative Queries
+site_url: https://altqq.baluyotraf.com
+site_description: Typed and Composable Tool for Handwritten SQL
+repo_url: https://github.com/baluyotraf/altqq
+repo_name: baluyotraf/altqq
+edit_uri: ""
+copyright: Copyright &copy; 2024 Raffaello Baluyot
+
+nav:
+  - Quick Start: index.md
+  - api.md
+
+plugins:
+  - include-markdown
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+  - search
+  - social
+
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      auto_title: true
+
+theme:
+  name: material
+  language: en
+  palette:
+    primary: black
+    accent: light blue
+  icon:
+    logo: fontawesome/solid/database
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+
+extra:
+  version:
+    default: stable
+    provider: mike
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/baluyotraf/
+      name: baluyotraf
+    - icon: fontawesome/brands/github
+      link: https://github.com/baluyotraf
+      name: baluyotraf

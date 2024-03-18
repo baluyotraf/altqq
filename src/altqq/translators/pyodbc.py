@@ -5,9 +5,10 @@ import typing
 from string import Formatter
 from typing import Any, Iterable, List, Mapping, Sequence, Union
 
+from typing_extensions import Annotated
+
 from altqq.structs import Query
 from altqq.types import QueryValueTypes, T
-from typing_extensions import Annotated
 
 
 @dc.dataclass
