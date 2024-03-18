@@ -27,6 +27,8 @@ pydantic = "^2.6.4"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.354"
+pytest = "^8.1.1"
+pytest-sugar = "^1.0.0"
 
 [tool.poetry.group.docs]
 optional = true
@@ -37,6 +39,22 @@ mkdocs = "^1.5.3"
 mkdocstrings = { version="^0.24.1", extras = ["python"] }
 mkdocs-include-markdown-plugin = "^6.0.4"
 mkdocs-material = { version = "^9.5.14", extras = ["imaging"] }
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    min_version = 4.0
+    env_list = py{39,310,311,312}
+
+    [testenv]
+    description = run the tests with pytest
+    allowlist_externals =
+        poetry
+    commands_pre =
+        poetry install
+    commands =
+        pytest tests
+"""
 
 [build-system]
 requires = ["poetry-core"]
