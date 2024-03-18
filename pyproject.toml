@@ -27,6 +27,16 @@ pydantic = "^2.6.4"
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.354"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+mike = "^2.0.0"
+mkdocs = "^1.5.3"
+mkdocstrings = "^0.24.1"
+mkdocs-include-markdown-plugin = "^6.0.4"
+mkdocs-material = { version = "^9.5.14", extras = ["imaging"]}
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
