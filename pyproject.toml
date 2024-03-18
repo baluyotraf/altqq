@@ -33,9 +33,9 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 mike = "^2.0.0"
 mkdocs = "^1.5.3"
-mkdocstrings = "^0.24.1"
+mkdocstrings = { version="^0.24.1", extras = ["python"] }
 mkdocs-include-markdown-plugin = "^6.0.4"
-mkdocs-material = { version = "^9.5.14", extras = ["imaging"]}
+mkdocs-material = { version = "^9.5.14", extras = ["imaging"] }
 
 [build-system]
 requires = ["poetry-core"]

@@ -8,11 +8,19 @@ copyright: Copyright &copy; 2024 Raffaello Baluyot
 
 nav:
   - Quick Start: index.md
+  - api.md
 
 plugins:
   - include-markdown
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_root_heading: true
   - search
   - social
+
 
 markdown_extensions:
   - pymdownx.superfences
@@ -45,4 +53,3 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/baluyotraf
       name: baluyotraf
-
