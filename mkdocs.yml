@@ -45,6 +45,7 @@ theme:
 
 extra:
   version:
+    default: stable
     provider: mike
   social:
     - icon: fontawesome/brands/linkedin
