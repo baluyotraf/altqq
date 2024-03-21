@@ -16,7 +16,7 @@ jobs:
       - uses: abatilo/actions-poetry@v2
       - run: git fetch origin gh-pages --depth=1
       - run: poetry install --with docs
-      - run: poetry run mike deploy ${{ github.ref_name }} stable
+      - run: poetry run mike deploy ${{ github.ref_name }} stable -u -p
 
   publish:
     runs-on: ubuntu-latest
@@ -28,4 +28,6 @@ jobs:
       - uses: abatilo/actions-poetry@v2
       - run: poetry build
       - run: poetry publish --dry-run
-      - run: poetry publish
+      - env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPITOKEN }}
+        run: poetry publish
