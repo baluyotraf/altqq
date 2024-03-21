@@ -10,8 +10,6 @@ Alternative queries is a library created to help with handcrafted SQL queries.
 It works by providing a class that represent the queries, with parameters type
 checked by `Pydantic`.
 
-The library is currently still in development and has an alpha release.
-
 ## Installation
 
 The library is available in PyPI
