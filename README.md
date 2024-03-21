@@ -130,12 +130,3 @@ Running the code above should give the result below:
 
 ['arietta', 20]
 ```
-
-## Road Map
-
-Below is the list of things planned for the library
-
-- Documentation Page
-- Tests
-- Expansion of Supported Version
-- Support for other Python Database Tooling

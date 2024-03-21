@@ -12,7 +12,7 @@ convention = "google"
 [tool.poetry]
 name = "altqq"
 version = "0.0.1a2"
-description = "Alternative Queries: Typed and Composable Tool for Handwritten SQL"
+description = "Alternative Queries: Typed and Reusable Handcrafted SQL"
 authors = ["baluyotraf <baluyotraf@outlook.com>"]
 maintainers = ["baluyotraf <baluyotraf@outlook.com>"]
 license = "MIT"
