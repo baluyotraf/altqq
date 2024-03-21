@@ -1,4 +1,4 @@
-name: qa
+name: release
 
 on:
   push:
@@ -16,7 +16,10 @@ jobs:
       - uses: abatilo/actions-poetry@v2
       - run: git fetch origin gh-pages --depth=1
       - run: poetry install --with docs
-      - run: poetry run mike deploy ${{ github.ref_name }} stable -u -p
+      - run: |
+          GIT_COMMITTER_NAME=actions \
+          GIT_COMMITTER_EMAIL=actions@github.com \
+          poetry run mike deploy ${{ github.ref_name }} stable -u -p
 
   publish:
     runs-on: ubuntu-latest
