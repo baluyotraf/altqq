@@ -1,0 +1,16 @@
+name: aq
+
+on:
+  push:
+
+jobs:
+  lint-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: abatilo/actions-poetry@v2
+      - run: poetry install
+      - uses: pre-commit/action@v3.0.1
