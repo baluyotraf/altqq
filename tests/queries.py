@@ -7,7 +7,7 @@ import altqq
 
 
 @dc.dataclass
-class TestQuery:
+class SampleQuery:
     """Defines the conversion of query to different translations."""
 
     query: altqq.Query
@@ -32,7 +32,7 @@ class OrderQuery(altqq.Query):
     """Test query that orders a query."""
 
     __query__ = """
-        SELECT * FROM ({subquery}) AS tbl
+        SELECT * FROM ( {subquery} ) AS tbl
         ORDER BY "{order_column}" {order}
     """
 
@@ -45,9 +45,9 @@ class UnionAllQuery(altqq.Query):
     """Test query that union all two queries."""
 
     __query__ = """
-        SELECT * FROM ({query1}) AS tbl1
+        SELECT * FROM ( {query1} ) AS tbl1
         UNION ALL
-        SELECT * FROM ({query2}) AS tbl2
+        SELECT * FROM ( {query2} ) AS tbl2
     """
 
     query1: altqq.Query
@@ -55,11 +55,61 @@ class UnionAllQuery(altqq.Query):
 
 
 TEST_DATA = [
-    TestQuery(
-        SelectTableByFilter("Users", "name", "arietta"),
+    SampleQuery(
+        SelectTableByFilter("Users", "age", 25),
         pyodbc=altqq.PyODBCQuery(
-            query="""SELECT * FROM "Users" WHERE "name" = ?""", parameters=["arietta"]
+            query="""
+                SELECT * FROM "Users" WHERE "age" = ?
+            """,
+            parameters=[25],
         ),
-        plain_text="""SELECT * FROM "Users" WHERE "name" = 'arietta'""",
-    )
+        plain_text="""
+            SELECT * FROM "Users" WHERE "age" = 25
+        """,
+    ),
+    SampleQuery(
+        OrderQuery(SelectTableByFilter("Users", "last_name", "Fine"), "age", "asc"),
+        pyodbc=altqq.PyODBCQuery(
+            query="""
+                SELECT * FROM (
+                    SELECT * FROM "Users" WHERE "last_name" = ?
+                ) AS tbl
+                ORDER BY "age" asc
+            """,
+            parameters=["Fine"],
+        ),
+        plain_text="""
+            SELECT * FROM (
+                SELECT * FROM "Users" WHERE "last_name" = 'Fine'
+            ) AS tbl
+            ORDER BY "age" asc
+        """,
+    ),
+    SampleQuery(
+        UnionAllQuery(
+            SelectTableByFilter("Music", "title", "Secret"),
+            SelectTableByFilter("Cities", "name", "Piova"),
+        ),
+        pyodbc=altqq.PyODBCQuery(
+            query="""
+                SELECT * FROM (
+                    SELECT * FROM "Music" WHERE "title" = ?
+                ) AS tbl1
+                UNION ALL
+                SELECT * FROM (
+                    SELECT * FROM "Cities" WHERE "name" = ?
+                ) AS tbl2
+            """,
+            parameters=["Secret", "Piova"],
+        ),
+        plain_text="""
+            SELECT * FROM (
+                SELECT * FROM "Music" WHERE "title" = 'Secret'
+            ) AS tbl1
+            UNION ALL
+            SELECT * FROM (
+                SELECT * FROM "Cities" WHERE "name" = 'Piova'
+            ) AS tbl2
+        """,
+    ),
 ]
