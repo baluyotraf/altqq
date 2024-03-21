@@ -1,0 +1,31 @@
+name: qa
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - uses: abatilo/actions-poetry@v2
+      - run: git fetch origin gh-pages --depth=1
+      - run: poetry install --with docs
+      - run: poetry run mike deploy ${{ github.ref_name }} stable
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+      - uses: abatilo/actions-poetry@v2
+      - run: poetry build
+      - run: poetry publish --dry-run
+      - run: poetry publish

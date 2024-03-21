@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - v*
   pull_request:
 
 jobs:
@@ -28,6 +26,7 @@ jobs:
       - run:
           poetry run pre-commit run --show-diff-on-failure --color=always --all
   test:
+    needs: lint-format
     strategy:
       matrix:
         os:
