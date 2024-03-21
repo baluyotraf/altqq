@@ -1,8 +1,9 @@
 """Structures used for defining queries."""
 
+import dataclasses as dc
 from typing import Any, ClassVar, Dict, Tuple
 
-import pydantic.dataclasses as dc
+import pydantic.dataclasses as pdc
 from typing_extensions import dataclass_transform
 
 QUERY_ATTRIB = "__query__"
@@ -42,7 +43,7 @@ class QueryMeta(type):
         dataclass = super().__new__(cls, name, bases, dct)
         if not cls._check_query_attribute(dataclass, dct):
             raise ValueError(f"A string {QUERY_ATTRIB} must be provided")
-        return dc.dataclass(dataclass)
+        return pdc.dataclass(dataclass)
 
 
 class Query(metaclass=QueryMeta):
@@ -53,3 +54,6 @@ class Query(metaclass=QueryMeta):
     """
 
     __query__: ClassVar[str]
+
+
+Calculated = dc.field(init=False)

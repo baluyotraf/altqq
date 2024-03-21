@@ -1,14 +1,14 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with pyright](https://microsoft.github.io/pyright/img/pyright_badge.svg)](https://microsoft.github.io/pyright/)
+[![qa](https://github.com/baluyotraf/altqq/actions/workflows/qa.yml/badge.svg)](https://github.com/baluyotraf/altqq/actions/workflows/qa.yml)
+[![release](https://github.com/baluyotraf/altqq/actions/workflows/release.yml/badge.svg)](https://github.com/baluyotraf/altqq/actions/workflows/release.yml)
 
 # Alternative Queries
 
 Alternative queries is a library created to help with handcrafted SQL queries.
 It works by providing a class that represent the queries, with parameters type
 checked by `Pydantic`.
-
-The library is currently still in development and has an alpha release.
 
 ## Installation
 
@@ -128,12 +128,3 @@ Running the code above should give the result below:
 
 ['arietta', 20]
 ```
-
-## Road Map
-
-Below is the list of things planned for the library
-
-- Documentation Page
-- Tests
-- Expansion of Supported Version
-- Support for other Python Database Tooling

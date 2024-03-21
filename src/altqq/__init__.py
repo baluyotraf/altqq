@@ -1,5 +1,6 @@
 """Main entry point for the altqq library."""
 
+from altqq.structs import Calculated as Calculated
 from altqq.structs import Query
 from altqq.translators.plain_text import PlainTextTranslator
 from altqq.translators.pyodbc import PyODBCQuery, PyODBCTranslator
