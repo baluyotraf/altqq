@@ -79,7 +79,7 @@ class PsycopgTranslator:
         if typing.get_origin(field.type) == Annotated:
             # Pyright can't match the __metadata__ attribute to Annotated
             if QueryValueTypes.NON_PARAMETER in field.type.__metadata__:  # type: ignore
-                return PsycopgStatement(value, ())
+                return PsycopgStatement(value.replace("%", "%%"), ())
 
         return PsycopgStatement("%s", (value,))
 
