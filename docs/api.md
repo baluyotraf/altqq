@@ -14,6 +14,14 @@ These are used for working with PyODBC.
 
 ### ::: altqq.PyODBCQuery
 
+## Psycopg
+
+These are used for working with Psycopg.
+
+### ::: altqq.to_psycopg
+
+### ::: altqq.PsycopgQuery
+
 ## Plain Text
 
 These are used for working with plain text SQL.
