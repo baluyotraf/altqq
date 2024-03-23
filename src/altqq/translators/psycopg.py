@@ -73,7 +73,7 @@ class PsycopgTranslator:
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> PsycopgStatement:
         value = getattr(query, field.name)
         if field.type == Query:
-            qq = self._convert_query(query)
+            qq = self._convert_query(value)
             return PsycopgStatement(qq.query, qq.parameters)
 
         if typing.get_origin(field.type) == Annotated:

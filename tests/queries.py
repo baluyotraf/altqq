@@ -12,6 +12,7 @@ class SampleQuery:
 
     query: altqq.Query
     pyodbc: altqq.PyODBCQuery
+    psycopg: altqq.PsycopgQuery
     plain_text: str
 
 
@@ -19,7 +20,7 @@ class SelectTableByFilter(altqq.Query):
     """Test query that selects and filters a table."""
 
     __query__ = """
-        SELECT * FROM "{table}"
+        SELECT *, (15 % 10) AS t FROM "{table}"
         WHERE "{filter_column}" = {filter_value}
     """
 
@@ -59,12 +60,18 @@ TEST_DATA = [
         SelectTableByFilter("Users", "age", 25),
         pyodbc=altqq.PyODBCQuery(
             query="""
-                SELECT * FROM "Users" WHERE "age" = ?
+                SELECT *, (15 % 10) AS t FROM "Users" WHERE "age" = ?
             """,
             parameters=[25],
         ),
+        psycopg=altqq.PsycopgQuery(
+            query="""
+                SELECT *, (15 %% 10) AS t FROM "Users" WHERE "age" = %s
+            """,
+            parameters=(25,),
+        ),
         plain_text="""
-            SELECT * FROM "Users" WHERE "age" = 25
+            SELECT *, (15 % 10) AS t FROM "Users" WHERE "age" = 25
         """,
     ),
     SampleQuery(
@@ -72,15 +79,24 @@ TEST_DATA = [
         pyodbc=altqq.PyODBCQuery(
             query="""
                 SELECT * FROM (
-                    SELECT * FROM "Users" WHERE "last_name" = ?
+                    SELECT *, (15 % 10) AS t FROM "Users" WHERE "last_name" = ?
                 ) AS tbl
                 ORDER BY "age" asc
             """,
             parameters=["Fine"],
         ),
+        psycopg=altqq.PsycopgQuery(
+            query="""
+                SELECT * FROM (
+                    SELECT *, (15 %% 10) AS t FROM "Users" WHERE "last_name" = %s
+                ) AS tbl
+                ORDER BY "age" asc
+            """,
+            parameters=("Fine",),
+        ),
         plain_text="""
             SELECT * FROM (
-                SELECT * FROM "Users" WHERE "last_name" = 'Fine'
+                SELECT *, (15 % 10) AS t FROM "Users" WHERE "last_name" = 'Fine'
             ) AS tbl
             ORDER BY "age" asc
         """,
@@ -93,22 +109,34 @@ TEST_DATA = [
         pyodbc=altqq.PyODBCQuery(
             query="""
                 SELECT * FROM (
-                    SELECT * FROM "Music" WHERE "title" = ?
+                    SELECT *, (15 % 10) AS t FROM "Music" WHERE "title" = ?
                 ) AS tbl1
                 UNION ALL
                 SELECT * FROM (
-                    SELECT * FROM "Cities" WHERE "name" = ?
+                    SELECT *, (15 % 10) AS t FROM "Cities" WHERE "name" = ?
                 ) AS tbl2
             """,
             parameters=["Secret", "Piova"],
         ),
+        psycopg=altqq.PsycopgQuery(
+            query="""
+                SELECT * FROM (
+                    SELECT *, (15 %% 10) AS t FROM "Music" WHERE "title" = %s
+                ) AS tbl1
+                UNION ALL
+                SELECT * FROM (
+                    SELECT *, (15 %% 10) AS t FROM "Cities" WHERE "name" = %s
+                ) AS tbl2
+            """,
+            parameters=("Secret", "Piova"),
+        ),
         plain_text="""
             SELECT * FROM (
-                SELECT * FROM "Music" WHERE "title" = 'Secret'
+                SELECT *, (15 % 10) AS t FROM "Music" WHERE "title" = 'Secret'
             ) AS tbl1
             UNION ALL
             SELECT * FROM (
-                SELECT * FROM "Cities" WHERE "name" = 'Piova'
+                SELECT *, (15 % 10) AS t FROM "Cities" WHERE "name" = 'Piova'
             ) AS tbl2
         """,
     ),
