@@ -1,14 +1,12 @@
 """Module for converting Query objects for PyODBC execution."""
 
 import dataclasses as dc
-import typing
 from string import Formatter
 from typing import Any, Iterable, List, Mapping, Sequence, Union
 
-from typing_extensions import Annotated
-
 from altqq.structs import Query
-from altqq.types import QueryValueTypes, T
+from altqq.translators.common import is_parameter, is_query_subclass
+from altqq.types import T
 
 
 @dc.dataclass
@@ -72,14 +70,12 @@ class PyODBCTranslator:
 
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> PyODBCStatement:
         value = getattr(query, field.name)
-        if field.type == Query:
+        if is_query_subclass(field.type):
             qq = self.__call__(value)
             return PyODBCStatement(qq.query, qq.parameters)
 
-        if typing.get_origin(field.type) == Annotated:
-            # Pyright can't match the __metadata__ attribute to Annotated
-            if QueryValueTypes.NON_PARAMETER in field.type.__metadata__:  # type: ignore
-                return PyODBCStatement(value, ())
+        if is_parameter(field.type):
+            return PyODBCStatement(value, ())
 
         return PyODBCStatement("?", [value])
 

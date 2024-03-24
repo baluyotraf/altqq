@@ -1,13 +1,11 @@
 """Module for converting Query objects to plain text SQL."""
 
 import dataclasses as dc
-import typing
 from typing import Any
 
-from typing_extensions import Annotated
-
 from altqq.structs import Query
-from altqq.types import QueryValueTypes, T
+from altqq.translators.common import is_parameter, is_query_subclass
+from altqq.types import T
 
 
 class PlainTextTranslator:
@@ -15,13 +13,11 @@ class PlainTextTranslator:
 
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> Any:
         value = getattr(query, field.name)
-        if field.type == Query:
+        if is_query_subclass(field.type):
             return self.__call__(value)
 
-        if typing.get_origin(field.type) == Annotated:
-            # Pyright can't match the __metadata__ attribute to Annotated
-            if QueryValueTypes.NON_PARAMETER in field.type.__metadata__:  # type: ignore
-                return value
+        if is_parameter(field.type):
+            return value
 
         # Numeric types are not escaped
         if isinstance(value, (int, float)):
