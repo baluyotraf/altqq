@@ -24,6 +24,14 @@ def test_to_psycopg__proper_query__correct_sql(query: SampleQuery):
 
 
 @pytest.mark.parametrize("query", TEST_DATA)
+def test_to_mysql__proper_query__correct_sql(query: SampleQuery):
+    """If the query parameters are correct, the mysql object is returned."""
+    res = altqq.to_mysql(query.query)
+    assert cws(query.mysql.query) == cws(res.query)
+    assert query.mysql.parameters == res.parameters
+
+
+@pytest.mark.parametrize("query", TEST_DATA)
 def test_to_plain_text__proper_query__correct_sql(query: SampleQuery):
     """If the query parameters are correct, the sql is returned."""
     sql = altqq.to_plain_text(query.query)

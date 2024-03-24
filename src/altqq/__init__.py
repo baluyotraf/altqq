@@ -2,6 +2,7 @@
 
 from altqq.structs import Calculated as Calculated
 from altqq.structs import Query
+from altqq.translators.mysql import MySQLQuery, MySQLTranslator
 from altqq.translators.plain_text import PlainTextTranslator
 from altqq.translators.psycopg import PsycopgQuery, PsycopgTranslator
 from altqq.translators.pyodbc import PyODBCQuery, PyODBCTranslator
@@ -13,6 +14,7 @@ class Translators:
 
     PYODBC = PyODBCTranslator()
     PSYCOPG = PsycopgTranslator()
+    MYSQL = MySQLTranslator()
     PLAIN_TEXT = PlainTextTranslator()
 
 
@@ -38,6 +40,18 @@ def to_psycopg(query: Query) -> PsycopgQuery:
         PsycopgQuery: Equivalent query for Psycopg usage.
     """
     return Translators.PSYCOPG(query)
+
+
+def to_mysql(query: Query) -> MySQLQuery:
+    """Converts a `Query` to its corresponding `MySQL` object.
+
+    Args:
+        query (Query): Query to translate to MySQL
+
+    Returns:
+        MySQLQuery: Equivalent query for MySQL usage.
+    """
+    return Translators.MYSQL(query)
 
 
 def to_plain_text(query: Query) -> str:
