@@ -58,8 +58,8 @@ class UnionAllQuery(altqq.Query):
         SELECT * FROM ( {query2} ) AS tbl2
     """
 
-    query1: altqq.Query
-    query2: altqq.Query
+    query1: SelectTableByFilter
+    query2: SelectTableByFilter
 
 
 TEST_DATA = [

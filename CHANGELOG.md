@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+- Subclass check improvements on `altqq.Query` ([#12])
+
+[#12]: https://github.com/baluyotraf/altqq/pull/12
+
 ## 0.0.3
 
 - Add `psycopg` support ([#9])
@@ -12,4 +18,4 @@
 
 ## 0.0.2
 
-Initial Release
+- Initial Release
