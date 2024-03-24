@@ -164,7 +164,6 @@ can make defining parameters error-prone. Alternative Queries provide a named
 option, while doing the parameter merging under the hood.
 
 ```python
-import typing
 import altqq
 
 class Paging(altqq.Query):

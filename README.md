@@ -62,5 +62,5 @@ print(pyodbc_query.query)
 #        WHERE first_name = ?
 #
 print(pyodbc_query.parameters)
-#['arietta']
+# ['arietta']
 ```

@@ -7,8 +7,13 @@ edit_uri: ""
 copyright: Copyright &copy; 2024 Raffaello Baluyot
 
 nav:
-  - Quick Start: index.md
-  - api.md
+  - index.md
+  - User Documentation:
+      - user-guide.md
+      - rationale.md
+  - Dev Documentation:
+      - api.md
+      - changelog.md
 
 plugins:
   - include-markdown
