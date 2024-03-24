@@ -11,9 +11,12 @@ It works by providing a class that represent the queries where its parameter
 types are checked by `Pydantic`.
 
 If you want to write reusable and nested handcrafted SQL queries, you can check
-more information on the [Alternative Queries Documentation].
+more information on the [Alternative Queries Documentation]. If you want to know
+how Alternative Queries can help you, check the [Why use Alternative Queries?]
+section of the documentation.
 
 [Alternative Queries Documentation]: https://altqq.baluyotraf.com/stable/
+[Why use Alternative Queries?]: https://altqq.baluyotraf.com/stable/rationale/
 
 ## Installation
 
