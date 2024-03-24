@@ -15,6 +15,13 @@ class SampleQuery:
     psycopg: altqq.PsycopgQuery
     plain_text: str
 
+    @property
+    def mysql(self) -> altqq.MySQLQuery:
+        """Generates mysql query from psycopg."""
+        return altqq.MySQLQuery(
+            query=self.psycopg.query, parameters=self.psycopg.parameters
+        )
+
 
 class SelectTableByFilter(altqq.Query):
     """Test query that selects and filters a table."""
