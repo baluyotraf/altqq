@@ -7,85 +7,30 @@
 # Alternative Queries
 
 Alternative queries is a library created to help with handcrafted SQL queries.
-It works by providing a class that represent the queries, with parameters type
-checked by `Pydantic`.
+It works by providing a class that represent the queries where its parameter
+types are checked by `Pydantic`.
+
+If you want to write reusable and nested handcrafted SQL queries, you can check
+more information on the [Alternative Queries Documentation]. If you want to know
+how Alternative Queries can help you, check the [Why use Alternative Queries?]
+section of the documentation.
+
+[Alternative Queries Documentation]: https://altqq.baluyotraf.com/stable/
+[Why use Alternative Queries?]: https://altqq.baluyotraf.com/stable/rationale/
 
 ## Installation
 
-The library is available in PyPI
+The library is available in the Python Package Index.
 
 ```bash
 pip install altqq
 ```
 
-## Basic Usage
+## Quick Start
 
-To use the library, you can define a class that represents a query. Then this
-query can be converted to plain text or `pyodbc` usable query.
-
-```python
-import altqq
-
-class SelectUserByFirstName(altqq.Query):
-    __query__ = """
-        SELECT * FROM "Users"
-        WHERE first_name = {first_name}
-    """
-    first_name: str
-
-q = altqq.to_pyodbc(SelectUserByFirstName(first_name="arietta"))
-print(q.query)
-print(q.parameters)
-```
-
-Running the code above should give the result below:
-
-```bash
-
-        SELECT * FROM "Users"
-        WHERE first_name = ?
-
-['arietta']
-```
-
-## Templating Non-Parameters
-
-By default, the class properties are treated as parameters. If there's a need
-for more customization, they can be declared as `altqq.NonParameter`.
-
-```python
-import altqq
-
-class SelectByFirstName(altqq.Query):
-    __query__ = """
-        SELECT * FROM "{table}"
-        WHERE first_name = {first_name}
-    """
-    first_name: str
-    table: altqq.NonParameter[str]
-
-q = altqq.to_pyodbc(SelectByFirstName(
-    first_name="arietta",
-    table="Users"
-))
-print(q.query)
-print(q.parameters)
-```
-
-Running the code above should give the result below:
-
-```bash
-
-        SELECT * FROM "Users"
-        WHERE first_name = ?
-
-['arietta']
-```
-
-## Nested Queries
-
-Queries can also use other queries. When passed to the functions for conversion,
-other queries will also be converted.
+To start, define a class by inheriting the `altqq.Query` class. The class should
+have a query following the python formatting standards. The variable names
+inside the `__query__` must match the other attributes defined on the class.
 
 ```python
 import altqq
@@ -96,35 +41,26 @@ class SelectUserByFirstName(altqq.Query):
         WHERE first_name = {first_name}
     """
     first_name: str
-
-
-class SelectSubqueryByAge(altqq.Query):
-    __query__ = """
-        SELECT * FROM ({subquery}) AS tbl
-        WHERE tbl.age = {age}
-    """
-    age: int
-    subquery: altqq.Query
-
-q = altqq.to_pyodbc(SelectSubqueryByAge(
-    age=20,
-    subquery=SelectUserByFirstName(
-        first_name="arietta"
-    )
-))
-print(q.query)
-print(q.parameters)
 ```
 
-Running the code above should give the result below:
+The class can be used like a `dataclass`. In fact, classes inheriting the
+`altqq.Query` class are turned into a `Pydantic` `dataclass`.
 
-```bash
+```python
+query = SelectUserByFirstName(first_name="arietta")
+```
 
-        SELECT * FROM (
-        SELECT * FROM "Users"
-        WHERE first_name = ?
-    ) AS tbl
-        WHERE tbl.age = ?
+The object can be converted into a query suitable for a DBMS library of your
+choice. For example, calling the `altqq.to_pyodbc` function will convert the
+object to `PyODBCQuery` which provides the query string and the parameters.
 
-['arietta', 20]
+```python
+pyodbc_query = altqq.to_pyodbc(query)
+print(pyodbc_query.query)
+#
+#        SELECT * FROM "Users"
+#        WHERE first_name = ?
+#
+print(pyodbc_query.parameters)
+# ['arietta']
 ```
