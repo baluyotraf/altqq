@@ -5,7 +5,7 @@ from string import Formatter
 from typing import Any, Iterable, List, Mapping, Sequence, Tuple, Union
 
 from altqq.structs import Query
-from altqq.translators.common import is_parameter, is_query_subclass
+from altqq.translators.common import is_parameter, is_query_instance
 from altqq.types import T
 
 
@@ -70,7 +70,7 @@ class PsycopgTranslator:
 
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> PsycopgStatement:
         value = getattr(query, field.name)
-        if is_query_subclass(field.type):
+        if is_query_instance(value):
             qq = self._convert_query(value)
             return PsycopgStatement(qq.query, qq.parameters)
 
