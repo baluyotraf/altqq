@@ -11,7 +11,7 @@ convention = "google"
 
 [tool.poetry]
 name = "altqq"
-version = "0.0.4"
+version = "0.0.5"
 description = "Alternative Queries: Typed and Reusable Handcrafted SQL"
 authors = ["baluyotraf <baluyotraf@outlook.com>"]
 maintainers = ["baluyotraf <baluyotraf@outlook.com>"]

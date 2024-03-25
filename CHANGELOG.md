@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.5
+
+- Nested `altqq.Query` are now checked by instance ([#13])
+
+[#13]: https://github.com/baluyotraf/altqq/pull/13
+
 ## 0.0.4
 
 - Subclass check improvements on `altqq.Query` ([#12])

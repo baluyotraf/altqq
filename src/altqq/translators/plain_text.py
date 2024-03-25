@@ -4,7 +4,7 @@ import dataclasses as dc
 from typing import Any
 
 from altqq.structs import Query
-from altqq.translators.common import is_parameter, is_query_subclass
+from altqq.translators.common import is_parameter, is_query_instance
 from altqq.types import T
 
 
@@ -13,7 +13,7 @@ class PlainTextTranslator:
 
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> Any:
         value = getattr(query, field.name)
-        if is_query_subclass(field.type):
+        if is_query_instance(value):
             return self.__call__(value)
 
         if is_parameter(field.type):
