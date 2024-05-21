@@ -4,24 +4,17 @@ import dataclasses as dc
 from typing import Any
 
 from altqq.structs import Query
-from altqq.translators.common import is_parameter, is_query_instance
-from altqq.types import T
+from altqq.translators import common
+from altqq.types import QueryValueTypes, T
 
 
 class PlainTextTranslator:
     """Converts a `Query` to a plain text SQL."""
 
-    def _resolve_value(self, query: Query, field: dc.Field[T]) -> Any:
-        value = getattr(query, field.name)
-        if is_query_instance(value):
-            return self.__call__(value)
-
-        if is_parameter(field.type):
-            return value
-
+    def _resolve_parameters(self, value: Any) -> str:
         # Numeric types are not escaped
         if isinstance(value, (int, float)):
-            return value
+            return str(value)
 
         # None is written as NULL
         if value is None:
@@ -29,6 +22,20 @@ class PlainTextTranslator:
 
         # All other types fall down to strings and are escaped
         return f"'{value}'"
+
+    def _resolve_value(self, query: Query, field: dc.Field[T]) -> str:
+        value = getattr(query, field.name)
+        if common.is_query_instance(value):
+            return self.__call__(value)
+
+        field_type = common.get_parameter_type(field.type)
+        if field_type == QueryValueTypes.NON_PARAMETER:
+            return value
+        elif field_type == QueryValueTypes.LIST_PARAMETER:
+            comma_separated = ",".join(self._resolve_parameters(p) for p in value)
+            return f"({comma_separated})"
+        else:
+            return self._resolve_parameters(value)
 
     def __call__(self, query: Query) -> str:
         """Converts a `Query` to a plain text SQL.

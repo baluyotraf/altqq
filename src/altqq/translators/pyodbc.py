@@ -5,8 +5,8 @@ from string import Formatter
 from typing import Any, Iterable, List, Mapping, Sequence, Union
 
 from altqq.structs import Query
-from altqq.translators.common import is_parameter, is_query_instance
-from altqq.types import T
+from altqq.translators import common
+from altqq.types import QueryValueTypes, T
 
 
 @dc.dataclass
@@ -68,16 +68,23 @@ class PyODBCFormatter(Formatter):
 class PyODBCTranslator:
     """Converts a `Query` to its corresponding `PyODBCQuery` object."""
 
+    MARKER = "?"
+
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> PyODBCStatement:
         value = getattr(query, field.name)
-        if is_query_instance(value):
+        if common.is_query_instance(value):
             qq = self.__call__(value)
             return PyODBCStatement(qq.query, qq.parameters)
 
-        if is_parameter(field.type):
+        field_type = common.get_parameter_type(field.type)
+        if field_type == QueryValueTypes.NON_PARAMETER:
             return PyODBCStatement(value, ())
-
-        return PyODBCStatement("?", [value])
+        elif field_type == QueryValueTypes.LIST_PARAMETER:
+            return PyODBCStatement(
+                common.create_list_markers(self.MARKER, len(value)), value
+            )
+        else:
+            return PyODBCStatement(self.MARKER, [value])
 
     def __call__(self, query: Query) -> PyODBCQuery:
         """Converts a `Query` to its corresponding `PyODBCQuery` object.

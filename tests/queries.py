@@ -24,7 +24,7 @@ class SampleQuery:
 
 
 class SelectWithCalculated(altqq.Query):
-    """Tests queries that uses multiple calculated values."""
+    """Test queries that uses multiple calculated values."""
 
     __query__ = """
         SELECT * FROM Table WHERE A = {param} AND B = {calc1} AND C = {calc2}
@@ -38,6 +38,16 @@ class SelectWithCalculated(altqq.Query):
         """Initialize calculated parameters."""
         self.calc1 = 20
         self.calc2 = 30
+
+
+class SelectWithList(altqq.Query):
+    """Test query that uses a list."""
+
+    __query__ = """
+        SELECT * FROM table WHERE A IN {list}
+    """
+
+    list: altqq.ListParameter[int]
 
 
 class SelectTableByFilter(altqq.Query):
@@ -91,6 +101,17 @@ TEST_DATA = [
             parameters=(10, 20, 30),
         ),
         plain_text="""SELECT * FROM Table WHERE A = 10 AND B = 20 AND C = 30""",
+    ),
+    SampleQuery(
+        SelectWithList([10, 20, 30]),
+        pyodbc=altqq.PyODBCQuery(
+            query="""SELECT * FROM table WHERE A IN (?,?,?)""", parameters=[10, 20, 30]
+        ),
+        psycopg=altqq.PsycopgQuery(
+            query="""SELECT * FROM table WHERE A IN (%s,%s,%s)""",
+            parameters=(10, 20, 30),
+        ),
+        plain_text="""SELECT * FROM table WHERE A IN (10,20,30)""",
     ),
     SampleQuery(
         SelectTableByFilter("Users", "age", 25),
