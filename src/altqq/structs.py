@@ -9,8 +9,12 @@ from typing_extensions import dataclass_transform
 QUERY_ATTRIB = "__query__"
 
 
-class Calculated:
+class _Calculated:
     """Marker class for calculated values."""
+
+
+# Typehint the class marker to Any to avoid conflict with the type checkers
+Calculated: Any = _Calculated
 
 
 @dataclass_transform()
