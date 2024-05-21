@@ -5,12 +5,13 @@ from altqq.translators.mysql import MySQLQuery, MySQLTranslator
 from altqq.translators.plain_text import PlainTextTranslator
 from altqq.translators.psycopg import PsycopgQuery, PsycopgTranslator
 from altqq.translators.pyodbc import PyODBCQuery, PyODBCTranslator
-from altqq.types import NonParameter
+from altqq.types import ListParameter, NonParameter
 
 __all__ = [
     "Query",
     "Calculated",
     "NonParameter",
+    "ListParameter",
     "to_pyodbc",
     "to_psycopg",
     "to_mysql",

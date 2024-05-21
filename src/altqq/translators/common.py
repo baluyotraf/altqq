@@ -1,7 +1,7 @@
 """Translator related functions not belonging to other areas."""
 
 import typing
-from typing import Any
+from typing import Any, Set, cast
 
 from typing_extensions import Annotated
 
@@ -21,18 +21,39 @@ def is_query_instance(value: Any) -> bool:
     return isinstance(value, Query)
 
 
-def is_parameter(cls: type) -> bool:
-    """Checks if a type is a parameter type.
+ANNOTATED_TYPES: Set[QueryValueTypes] = {
+    QueryValueTypes.NON_PARAMETER,
+    QueryValueTypes.LIST_PARAMETER,
+}
+
+
+def get_parameter_type(cls: type) -> QueryValueTypes:
+    """Extracts the value type based on the typing.
 
     Args:
         cls (type): Type to check.
 
     Returns:
-        bool: True if parameter, else False.
+        QueryValueTypes: Role of the value in the query
     """
     if typing.get_origin(cls) == Annotated:
         # Pyright can't match the __metadata__ attribute to Annotated
-        if QueryValueTypes.NON_PARAMETER in cls.__metadata__:  # type: ignore
-            return True
+        for metadata in cls.__metadata__:  # type: ignore
+            if metadata in ANNOTATED_TYPES:
+                return cast(QueryValueTypes, metadata)
 
-    return False
+    return QueryValueTypes.PARAMETER
+
+
+def create_list_markers(marker: str, n: int) -> str:
+    """Creates list markers for list parameter types.
+
+    Args:
+        marker (str): Parameter marker used by the translation
+        n (int): Number of parameters in the list
+
+    Returns:
+        str: String to represent the list
+    """
+    comma_separated = ",".join(marker for _ in range(n))
+    return f"({comma_separated})"

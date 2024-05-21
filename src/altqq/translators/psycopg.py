@@ -5,8 +5,8 @@ from string import Formatter
 from typing import Any, Iterable, List, Mapping, Sequence, Tuple, Union
 
 from altqq.structs import Query
-from altqq.translators.common import is_parameter, is_query_instance
-from altqq.types import T
+from altqq.translators import common
+from altqq.types import QueryValueTypes, T
 
 
 @dc.dataclass
@@ -68,16 +68,23 @@ class PsycopgFormatter(Formatter):
 class PsycopgTranslator:
     """Converts a `Query` to its corresponding `PsycopgQuery` object."""
 
+    MARKER = "%s"
+
     def _resolve_value(self, query: Query, field: dc.Field[T]) -> PsycopgStatement:
         value = getattr(query, field.name)
-        if is_query_instance(value):
+        if common.is_query_instance(value):
             qq = self._convert_query(value)
             return PsycopgStatement(qq.query, qq.parameters)
 
-        if is_parameter(field.type):
-            return PsycopgStatement(value.replace("%", "%%"), ())
-
-        return PsycopgStatement("%s", (value,))
+        match common.get_parameter_type(field.type):
+            case QueryValueTypes.NON_PARAMETER:
+                return PsycopgStatement(value.replace("%", "%%"), ())
+            case QueryValueTypes.LIST_PARAMETER:
+                return PsycopgStatement(
+                    common.create_list_markers(self.MARKER, len(value)), value
+                )
+            case QueryValueTypes.PARAMETER:
+                return PsycopgStatement(self.MARKER, (value,))
 
     def _convert_query(self, query: Query) -> PsycopgQuery:
         formatter = PsycopgFormatter()
