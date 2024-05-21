@@ -77,6 +77,8 @@ There are cases in which one would prefer to compute the value of a parameter.
 For example, defining the columns to fetch inside a `SELECT` query.
 
 ```python
+import altqq
+
 class Select(altqq.Query):
     __query__ = """
         SELECT {_columns} FROM "{table}"
@@ -96,13 +98,34 @@ print(res.query) # SELECT "id","first_name","last_name" FROM "Users"
 ```
 
 Assigning a value as `altqq.Calculated` means that the value will not be
-provided by the user. Internally, `altqq.Calculated` is just an alias to
+provided by the user. Internally, `altqq.Calculated` is just replaced with
 `dataclasses.field(init=False)`. Given that all `altqq.Query` objects are
 `Pydantic` `dataclass`, the calculated values can be assigned inside the
 `__post_init__` method.
 
 As defined by the `Pydantic` `dataclass` behavior, the types for the assignment
 inside the `__post_init__` method are not checked.
+
+## List Parameters
+
+For list that are used as parameters, a special `altqq.ListParameter` typing can
+be used to denote that `altqq` should expand the list as a parameter.
+
+```python
+import altqq
+
+class SelectUser(altqq.Query):
+    __query__ = """
+        SELECT * FROM Users WHERE user_id in {user_id}
+    """
+
+    user_id: altqq.ListParameter[int]
+
+
+query = SelectUser(user_id=[1,2,3])
+res = altqq.to_pyodbc(query)
+print(res.query) # SELECT * FROM Users WHERE user_id in (?,?,?)
+```
 
 ## Additional Validation
 

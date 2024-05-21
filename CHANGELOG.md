@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.6
+
+- Fix `altqq.Calculated` not being providing new a descriptor for each attribute
+  ([#14])
+- Add `altqq.ListParameter` for providing list of values as parameters ([#15])
+
+[#14]: https://github.com/baluyotraf/altqq/pull/14
+[#15]: https://github.com/baluyotraf/altqq/pull/15
+
 ## 0.0.5
 
 - Nested `altqq.Query` are now checked by instance ([#13])

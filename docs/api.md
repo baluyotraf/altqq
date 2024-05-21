@@ -6,6 +6,18 @@ These are used for defining queries.
 
 ### ::: altqq.Query
 
+### `altqq.NonParameter`
+
+Non-parameter type hint.
+
+### `altqq.ListParameter`
+
+List parameter type hint.
+
+### `altqq.Calculated`
+
+Calculated value assignment.
+
 ## PyODBC
 
 These are used for working with PyODBC.
