@@ -23,6 +23,23 @@ class SampleQuery:
         )
 
 
+class SelectWithCalculated(altqq.Query):
+    """Tests queries that uses multiple calculated values."""
+
+    __query__ = """
+        SELECT * FROM Table WHERE A = {param} AND B = {calc1} AND C = {calc2}
+    """
+
+    param: int
+    calc1: int = altqq.Calculated
+    calc2: int = altqq.Calculated
+
+    def __post_init__(self):
+        """Initialize calculated parameters."""
+        self.calc1 = 20
+        self.calc2 = 30
+
+
 class SelectTableByFilter(altqq.Query):
     """Test query that selects and filters a table."""
 
@@ -63,6 +80,18 @@ class UnionAllQuery(altqq.Query):
 
 
 TEST_DATA = [
+    SampleQuery(
+        SelectWithCalculated(10),
+        pyodbc=altqq.PyODBCQuery(
+            query="""SELECT * FROM Table WHERE A = ? AND B = ? AND C = ?""",
+            parameters=[10, 20, 30],
+        ),
+        psycopg=altqq.PsycopgQuery(
+            query="""SELECT * FROM Table WHERE A = %s AND B = %s AND C = %s""",
+            parameters=(10, 20, 30),
+        ),
+        plain_text="""SELECT * FROM Table WHERE A = 10 AND B = 20 AND C = 30""",
+    ),
     SampleQuery(
         SelectTableByFilter("Users", "age", 25),
         pyodbc=altqq.PyODBCQuery(
