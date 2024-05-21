@@ -28,14 +28,14 @@ class PlainTextTranslator:
         if common.is_query_instance(value):
             return self.__call__(value)
 
-        match common.get_parameter_type(field.type):
-            case QueryValueTypes.NON_PARAMETER:
-                return value
-            case QueryValueTypes.LIST_PARAMETER:
-                comma_separated = ",".join(self._resolve_parameters(p) for p in value)
-                return f"({comma_separated})"
-            case QueryValueTypes.PARAMETER:
-                return self._resolve_parameters(value)
+        field_type = common.get_parameter_type(field.type)
+        if field_type == QueryValueTypes.NON_PARAMETER:
+            return value
+        elif field_type == QueryValueTypes.LIST_PARAMETER:
+            comma_separated = ",".join(self._resolve_parameters(p) for p in value)
+            return f"({comma_separated})"
+        else:
+            return self._resolve_parameters(value)
 
     def __call__(self, query: Query) -> str:
         """Converts a `Query` to a plain text SQL.

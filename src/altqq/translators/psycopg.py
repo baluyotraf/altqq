@@ -76,15 +76,15 @@ class PsycopgTranslator:
             qq = self._convert_query(value)
             return PsycopgStatement(qq.query, qq.parameters)
 
-        match common.get_parameter_type(field.type):
-            case QueryValueTypes.NON_PARAMETER:
-                return PsycopgStatement(value.replace("%", "%%"), ())
-            case QueryValueTypes.LIST_PARAMETER:
-                return PsycopgStatement(
-                    common.create_list_markers(self.MARKER, len(value)), value
-                )
-            case QueryValueTypes.PARAMETER:
-                return PsycopgStatement(self.MARKER, (value,))
+        field_type = common.get_parameter_type(field.type)
+        if field_type == QueryValueTypes.NON_PARAMETER:
+            return PsycopgStatement(value.replace("%", "%%"), ())
+        elif field_type == QueryValueTypes.LIST_PARAMETER:
+            return PsycopgStatement(
+                common.create_list_markers(self.MARKER, len(value)), value
+            )
+        else:
+            return PsycopgStatement(self.MARKER, (value,))
 
     def _convert_query(self, query: Query) -> PsycopgQuery:
         formatter = PsycopgFormatter()

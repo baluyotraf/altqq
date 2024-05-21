@@ -76,15 +76,15 @@ class PyODBCTranslator:
             qq = self.__call__(value)
             return PyODBCStatement(qq.query, qq.parameters)
 
-        match common.get_parameter_type(field.type):
-            case QueryValueTypes.NON_PARAMETER:
-                return PyODBCStatement(value, ())
-            case QueryValueTypes.LIST_PARAMETER:
-                return PyODBCStatement(
-                    common.create_list_markers(self.MARKER, len(value)), value
-                )
-            case QueryValueTypes.PARAMETER:
-                return PyODBCStatement(self.MARKER, [value])
+        field_type = common.get_parameter_type(field.type)
+        if field_type == QueryValueTypes.NON_PARAMETER:
+            return PyODBCStatement(value, ())
+        elif field_type == QueryValueTypes.LIST_PARAMETER:
+            return PyODBCStatement(
+                common.create_list_markers(self.MARKER, len(value)), value
+            )
+        else:
+            return PyODBCStatement(self.MARKER, [value])
 
     def __call__(self, query: Query) -> PyODBCQuery:
         """Converts a `Query` to its corresponding `PyODBCQuery` object.
