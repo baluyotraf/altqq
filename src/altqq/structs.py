@@ -9,6 +9,10 @@ from typing_extensions import dataclass_transform
 QUERY_ATTRIB = "__query__"
 
 
+class Calculated:
+    """Marker class for calculated values."""
+
+
 @dataclass_transform()
 class QueryMeta(type):
     """Metaclass for generating Query objects that the library supports.
@@ -34,12 +38,19 @@ class QueryMeta(type):
 
         return False
 
+    @staticmethod
+    def _resolve_calculated_fields(dct: Dict[str, Any]):
+        for k, v in dct.items():
+            if v == Calculated:
+                dct[k] = dc.field(init=False)
+
     def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]):
         """Creates a new class of the metaclass.
 
         This wraps the newly created class with Pydantic Dataclass and checks
         the `__query__` attribute.
         """
+        cls._resolve_calculated_fields(dct)
         dataclass = super().__new__(cls, name, bases, dct)
         if not cls._check_query_attribute(dataclass, dct):
             raise ValueError(f"A string {QUERY_ATTRIB} must be provided")
@@ -54,6 +65,3 @@ class Query(metaclass=QueryMeta):
     """
 
     __query__: ClassVar[str]
-
-
-Calculated = dc.field(init=False)
