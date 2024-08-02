@@ -78,7 +78,7 @@ class PsycopgTranslator:
 
         field_type = common.get_parameter_type(field.type)
         if field_type == QueryValueTypes.NON_PARAMETER:
-            return PsycopgStatement(value.replace("%", "%%"), ())
+            return PsycopgStatement(str(value).replace("%", "%%"), ())
         elif field_type == QueryValueTypes.LIST_PARAMETER:
             return PsycopgStatement(
                 common.create_list_markers(self.MARKER, len(value)), value

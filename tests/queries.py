@@ -63,6 +63,19 @@ class SelectTableByFilter(altqq.Query):
     filter_value: Any
 
 
+class SelectTableByFilterNonParameter(altqq.Query):
+    """Test query that selects and filters a table."""
+
+    __query__ = """
+        SELECT *, (15 % 10) AS t FROM "{table}"
+        WHERE "{filter_column}" = {filter_value}
+    """
+
+    table: altqq.NonParameter[str]
+    filter_column: altqq.NonParameter[str]
+    filter_value: altqq.NonParameter[int]
+
+
 class OrderQuery(altqq.Query):
     """Test query that orders a query."""
 
@@ -112,6 +125,24 @@ TEST_DATA = [
             parameters=(10, 20, 30),
         ),
         plain_text="""SELECT * FROM table WHERE A IN (10,20,30)""",
+    ),
+    SampleQuery(
+        SelectTableByFilterNonParameter("Users", "age", 25),
+        pyodbc=altqq.PyODBCQuery(
+            query="""
+                SELECT *, (15 % 10) AS t FROM "Users" WHERE "age" = 25
+            """,
+            parameters=[],
+        ),
+        psycopg=altqq.PsycopgQuery(
+            query="""
+                SELECT *, (15 % 10) AS t FROM "Users" WHERE "age" = 25
+            """,
+            parameters=(),
+        ),
+        plain_text="""
+            SELECT *, (15 % 10) AS t FROM "Users" WHERE "age" = 25
+        """,
     ),
     SampleQuery(
         SelectTableByFilter("Users", "age", 25),
