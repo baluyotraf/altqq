@@ -1,7 +1,7 @@
 """Translator related functions not belonging to other areas."""
 
 import typing
-from typing import Any, Set, cast
+from typing import Any, Set, Type, cast
 
 from typing_extensions import Annotated
 
@@ -27,11 +27,11 @@ ANNOTATED_TYPES: Set[QueryValueTypes] = {
 }
 
 
-def get_parameter_type(cls: type) -> QueryValueTypes:
+def get_parameter_type(cls: Type[Any]) -> QueryValueTypes:
     """Extracts the value type based on the typing.
 
     Args:
-        cls (type): Type to check.
+        cls (Type[Any]): Type to check.
 
     Returns:
         QueryValueTypes: Role of the value in the query
