@@ -28,7 +28,8 @@ class PlainTextTranslator:
         if common.is_query_instance(value):
             return self.__call__(value)
 
-        field_type = common.get_parameter_type(field.type)
+        # Field has no typing in older python versions
+        field_type = common.get_parameter_type(field.type)  # type: ignore
         if field_type == QueryValueTypes.NON_PARAMETER:
             return value
         elif field_type == QueryValueTypes.LIST_PARAMETER:

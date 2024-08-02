@@ -76,7 +76,8 @@ class PyODBCTranslator:
             qq = self.__call__(value)
             return PyODBCStatement(qq.query, qq.parameters)
 
-        field_type = common.get_parameter_type(field.type)
+        # Field has no typing in older python versions
+        field_type = common.get_parameter_type(field.type)  # type: ignore
         if field_type == QueryValueTypes.NON_PARAMETER:
             return PyODBCStatement(value, ())
         elif field_type == QueryValueTypes.LIST_PARAMETER:
