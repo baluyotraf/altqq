@@ -2,7 +2,7 @@
 
 ## 0.0.7
 
-- Fix PostgreSQL issue with non-string non-parameter values ([#16]).
+- Fix PostgreSQL issue with non-string non-parameter values ([#17]).
 
 ## 0.0.6
 
