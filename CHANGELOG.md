@@ -4,6 +4,8 @@
 
 - Fix PostgreSQL issue with non-string non-parameter values ([#17]).
 
+[#17]: https://github.com/baluyotraf/altqq/pull/17
+
 ## 0.0.6
 
 - Fix `altqq.Calculated` not being providing new a descriptor for each attribute
