@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.8
+
+- Lessen restriction by making `ListParameter` a `Collection` ([#18]).
+
+[#18]: https://github.com/baluyotraf/altqq/pull/18
+
 ## 0.0.7
 
 - Fix PostgreSQL issue with non-string non-parameter values ([#17]).
