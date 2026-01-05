@@ -1,7 +1,8 @@
 """Module for typing related things."""
 
 import enum
-from typing import List, TypeVar
+from collections.abc import Collection
+from typing import TypeVar
 
 from typing_extensions import Annotated
 
@@ -17,4 +18,4 @@ class QueryValueTypes(enum.Enum):
 
 
 NonParameter = Annotated[T, QueryValueTypes.NON_PARAMETER]
-ListParameter = Annotated[List[T], QueryValueTypes.LIST_PARAMETER]
+ListParameter = Annotated[Collection[T], QueryValueTypes.LIST_PARAMETER]
