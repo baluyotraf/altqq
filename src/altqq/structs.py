@@ -5,7 +5,7 @@ from typing import Any, ClassVar, Dict, Tuple
 
 import pydantic.dataclasses as pdc
 from pydantic import ConfigDict
-from typing_extensions import dataclass_transform
+from typing_extensions import dataclass_transform, get_annotations
 
 QUERY_ATTRIB = "__query__"
 
@@ -34,12 +34,13 @@ class QueryMeta(type):
     """
 
     @staticmethod
-    def _check_query_attribute(dataclass: "QueryMeta", dct: Dict[str, Any]):
+    def _check_query_attribute(dataclass: "QueryMeta"):
         try:
             if isinstance(getattr(dataclass, QUERY_ATTRIB), str):
                 return True
         except AttributeError:
-            return QUERY_ATTRIB in dct["__annotations__"]
+            annotations = get_annotations(dataclass)
+            return QUERY_ATTRIB in annotations
 
         return False
 
@@ -57,8 +58,8 @@ class QueryMeta(type):
         """
         cls._resolve_calculated_fields(dct)
         dataclass = super().__new__(cls, name, bases, dct)
-        if not cls._check_query_attribute(dataclass, dct):
-            raise ValueError(f"A string {QUERY_ATTRIB} must be provided")
+        if not cls._check_query_attribute(dataclass):
+            raise ValueError(f"A {QUERY_ATTRIB} value or type hint must be provided.")
         return pdc.dataclass(dataclass, config=ConfigDict(arbitrary_types_allowed=True))
 
 

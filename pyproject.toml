@@ -24,6 +24,7 @@ keywords = ["database", "SQL"]
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = "^2.6.4"
+typing-extensions = "^4.15.0"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.354"
@@ -48,10 +49,12 @@ testpaths = ["tests"]
 legacy_tox_ini = """
     [tox]
     min_version = 4.0
-    env_list = py{39,310,311,312}
+    env_list = py{39,310,311,312,313,314}
 
     [gh]
     python =
+        3.14 = py314
+        3.13 = py313
         3.12 = py312
         3.11 = py311
         3.10 = py310
