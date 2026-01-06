@@ -4,7 +4,7 @@
 
 - Add official support for Python 3.13 and 3.14 ([#22]).
 
-[#18]: https://github.com/baluyotraf/altqq/pull/22
+[#22]: https://github.com/baluyotraf/altqq/pull/22
 
 ## 0.0.8
 
